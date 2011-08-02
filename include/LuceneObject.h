@@ -23,7 +23,7 @@
 
 #define LUCENE_CLASS(Name) \
     LUCENE_INTERFACE(Name); \
-    boost::shared_ptr<Name> shared_from_this() { return boost::static_pointer_cast<Name>(LuceneObject::shared_from_this()); } \
+    my_ptr<Name> shared_from_this() { return boost::static_pointer_cast<Name>(my_ptr<LuceneObject>(this)); } \
 
 namespace Lucene
 {

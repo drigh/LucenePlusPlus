@@ -34,6 +34,7 @@ using boost::uint64_t;
 
 #define SIZEOF_ARRAY(arr) (sizeof(arr) / sizeof((arr)[0]))
 
+#include "LucenePtr.h"
 #include "LuceneTypes.h"
 #include "Allocator.h"
 
@@ -62,12 +63,37 @@ namespace Lucene
     
     const std::basic_string< wchar_t, std::char_traits<wchar_t>, Allocator<wchar_t> > EmptyString;
     
-    typedef boost::shared_ptr<boost::interprocess::file_lock> filelockPtr;
-    typedef boost::shared_ptr<boost::thread> threadPtr;
+    typedef my_ptr<boost::interprocess::file_lock> filelockPtr;
+    typedef my_ptr<boost::thread> threadPtr;
             
-    typedef boost::shared_ptr<std::ofstream> ofstreamPtr;
-    typedef boost::shared_ptr<std::ifstream> ifstreamPtr;
-    typedef boost::shared_ptr<std::locale> localePtr;
+    typedef my_ptr<std::ofstream> ofstreamPtr;
+    typedef my_ptr<std::ifstream> ifstreamPtr;
+    typedef my_ptr<std::locale> localePtr;
+
+//    template <>
+//    filelockPtr newInstance(const wchar_t* filename)
+//    {
+//    	return boost::allocate_shared<ofstream>(Allocator<ofstream>(), filename);
+//    }
+//
+//    template <>
+//    ofstreamPtr newInstance(const wchar_t* filename, std::openmode om)
+//    {
+//    	return boost::allocate_shared<ofstream>(Allocator<ofstream>(), filename, om);
+//    }
+//
+//    template <>
+//    ifstreamPtr newInstance(const wchar_t* filename, std::openmode om)
+//    {
+//    	return boost::allocate_shared<ifstream>(Allocator<ifstream>(), filename, om);
+//    }
+//
+//    template <>
+//    localePtr newInstance(const std::locale& loc)
+//    {
+//    	return boost::allocate_shared<locale>(Allocator<locale>(), loc);
+//    }
+
 }
 
 #include "LuceneFactory.h"
@@ -213,7 +239,7 @@ namespace Lucene
     
     template < class KEY, class VALUE, class HASH = boost::hash<KEY>, class EQUAL = std::equal_to<KEY> > class SimpleLRUCache;
     typedef SimpleLRUCache< TermPtr, TermInfoPtr, luceneHash<TermPtr>, luceneEquals<TermPtr> > TermInfoCache;
-    typedef boost::shared_ptr<TermInfoCache> TermInfoCachePtr;
+    typedef my_ptr<TermInfoCache> TermInfoCachePtr;
 }
 
 #include "Synchronize.h"

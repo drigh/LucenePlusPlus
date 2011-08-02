@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(testInitValue)
         }
 
     protected:
-        virtual boost::shared_ptr<String> initialValue()
+        virtual my_ptr<String> initialValue()
         {
             return newInstance<String>(TEST_VALUE);
         }
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE(testInitValue)
 BOOST_AUTO_TEST_CASE(testNullValue)
 {
     CloseableThreadLocal<String> ctl;
-    ctl.set(boost::shared_ptr<String>());
+    ctl.set(my_ptr<String>());
     BOOST_CHECK(!ctl.get());
 }
 

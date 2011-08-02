@@ -30,7 +30,7 @@ namespace Lucene
         }
     
     protected:
-        boost::shared_ptr<map_type> mapContainer;
+        my_ptr<map_type> mapContainer;
         
     public:
         static this_type newInstance()
@@ -132,7 +132,7 @@ namespace Lucene
         
         VALUE get(const KEY& key) const
         {
-            iterator findValue = mapContainer->find(key);
+            const_iterator findValue = mapContainer->find(key);
             return findValue == mapContainer->end() ? VALUE() : findValue->second;
         }
         

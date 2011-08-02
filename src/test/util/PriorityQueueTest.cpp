@@ -28,7 +28,7 @@ public:
 };
 
 DECLARE_SHARED_PTR(IntegerPtrQueue)
-typedef boost::shared_ptr<int32_t> IntPtr;
+typedef my_ptr<int32_t> IntPtr;
 
 class IntegerPtrQueue : public PriorityQueue<IntPtr>
 {

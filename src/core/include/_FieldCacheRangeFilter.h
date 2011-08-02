@@ -139,7 +139,7 @@ namespace Lucene
         {
             if (Filter::equals(other))
                 return true;
-            boost::shared_ptr< FieldCacheRangeFilterNumeric<TYPE> > otherFilter(boost::dynamic_pointer_cast< FieldCacheRangeFilterNumeric<TYPE> >(other));
+            my_ptr< FieldCacheRangeFilterNumeric<TYPE> > otherFilter(boost::dynamic_pointer_cast< FieldCacheRangeFilterNumeric<TYPE> >(other));
             if (!otherFilter)
                 return false;
             if (field != otherFilter->field || includeLower != otherFilter->includeLower || includeUpper != otherFilter->includeUpper)

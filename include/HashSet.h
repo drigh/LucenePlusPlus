@@ -28,7 +28,7 @@ namespace Lucene
         }
     
     protected:
-        boost::shared_ptr<set_type> setContainer;
+        my_ptr<set_type> setContainer;
         
     public:
         static this_type newInstance()
