@@ -286,10 +286,10 @@ namespace Lucene
     TopDocsPtr MultiSearcherCallableNoSort::call()
     {
         TopDocsPtr docs(searchable->search(weight, filter, nDocs));
-        Collection<ScoreDocPtr> scoreDocs(docs->scoreDocs);
+        Collection<ScoreDocPtr>& scoreDocs(docs->scoreDocs);
         for (int32_t j = 0; j < scoreDocs.size(); ++j) // merge scoreDocs into hq
         {
-            ScoreDocPtr scoreDoc(scoreDocs[j]);
+            ScoreDocPtr& scoreDoc = scoreDocs[j];
             scoreDoc->doc += starts[i]; // convert doc 
             
             SyncLock syncLock(lock);
