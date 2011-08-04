@@ -12,7 +12,7 @@
 #define DECLARE_SHARED_PTR(Type) \
     class Type; \
     typedef my_ptr<Type> Type##Ptr; \
-    typedef my_ptr<Type> Type##WeakPtr;
+    typedef my_w_ptr<Type> Type##WeakPtr;
 //    typedef boost::shared_ptr<Type> Type##Ptr; \
 //    typedef boost::weak_ptr<Type> Type##WeakPtr;
     

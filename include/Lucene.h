@@ -70,30 +70,6 @@ namespace Lucene
     typedef my_ptr<std::ifstream> ifstreamPtr;
     typedef my_ptr<std::locale> localePtr;
 
-//    template <>
-//    filelockPtr newInstance(const wchar_t* filename)
-//    {
-//    	return boost::allocate_shared<ofstream>(Allocator<ofstream>(), filename);
-//    }
-//
-//    template <>
-//    ofstreamPtr newInstance(const wchar_t* filename, std::openmode om)
-//    {
-//    	return boost::allocate_shared<ofstream>(Allocator<ofstream>(), filename, om);
-//    }
-//
-//    template <>
-//    ifstreamPtr newInstance(const wchar_t* filename, std::openmode om)
-//    {
-//    	return boost::allocate_shared<ifstream>(Allocator<ifstream>(), filename, om);
-//    }
-//
-//    template <>
-//    localePtr newInstance(const std::locale& loc)
-//    {
-//    	return boost::allocate_shared<locale>(Allocator<locale>(), loc);
-//    }
-
 }
 
 #include "LuceneFactory.h"
