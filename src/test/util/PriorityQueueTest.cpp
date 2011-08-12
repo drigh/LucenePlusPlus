@@ -15,10 +15,10 @@ BOOST_FIXTURE_TEST_SUITE(PriorityQueueTest, LuceneTestFixture)
 
 DECLARE_SHARED_PTR(IntegerQueue)
 
-class IntegerQueue : public PriorityQueue<int32_t>
+class IntegerQueue : public PriorityQueue<int32_t, std::swap<int32_t> >
 {
 public:
-    IntegerQueue(int32_t maxSize) : PriorityQueue<int32_t>(maxSize)
+    IntegerQueue(int32_t maxSize) : PriorityQueue<int32_t, std::swap<int32_t> >(maxSize)
     {
     }
     
