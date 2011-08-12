@@ -16,7 +16,7 @@ namespace Lucene
     /// be found in constant time.  Put()'s and pop()'s require log(size) time.
     ///
     /// NOTE: This class pre-allocates a full array of length maxSize + 1.
-    template <typename TYPE>
+    template <typename TYPE, void(*swapper)(TYPE& a, TYPE& b) = boost::swap<typename TYPE::value_type> >
     class PriorityQueue : public LuceneObject
     {
     public:
@@ -172,35 +172,31 @@ namespace Lucene
         void upHeap()
         {
             int32_t i = _size;
-            TYPE node = heap[i]; // save bottom node
             int32_t j = MiscUtils::unsignedShift(i, 1);
-            while (j > 0 && lessThan(node, heap[j]))
+            while (j > 0 && lessThan(heap[i], heap[j]))
             {
-                heap[i] = heap[j]; // shift parents down
+                (*swapper)(heap[i], heap[j]); // shift parents down
                 i = j;
                 j = MiscUtils::unsignedShift(j, 1);
             }
-            heap[i] = node; // install saved node
         }
         
         void downHeap()
         {
             int32_t i = 1;
-            TYPE node = heap[i]; // save top node
             int32_t j = i << 1; // find smaller child
             int32_t k = j + 1;
             if (k <= _size && lessThan(heap[k], heap[j]))
                 j = k;
-            while (j <= _size && lessThan(heap[j], node))
+            while (j <= _size && lessThan(heap[j], heap[i]))
             {
-                heap[i] = heap[j]; // shift up child
+                (*swapper)(heap[i], heap[j]); // shift up child
                 i = j;
                 j = i << 1;
                 k = j + 1;
                 if (k <= _size && lessThan(heap[k], heap[j]))
                     j = k;
             }
-            heap[i] = node; // install saved node
         }
         
         /// Determines the ordering of objects in this priority queue.  Subclasses must define this one method.
