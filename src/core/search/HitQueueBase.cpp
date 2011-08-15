@@ -21,7 +21,7 @@ namespace Lucene
     
     void HitQueueBase::initialize()
     {
-        queue = newLucene<PriorityQueueScoreDocs>(shared_from_this(), queueSize);
+        queue = newLucene<PriorityQueueScoreDocs>(this, queueSize);
     }
     
     const ScoreDocPtr& HitQueueBase::add(const ScoreDocPtr& scoreDoc)
@@ -69,18 +69,13 @@ namespace Lucene
         return ScoreDocPtr();
     }
     
-    PriorityQueueScoreDocs::PriorityQueueScoreDocs(HitQueueBasePtr hitQueue, int32_t size) : PriorityQueue<ScoreDocPtr>(size)
+    PriorityQueueScoreDocs::PriorityQueueScoreDocs(HitQueueBase* hitQueue, int32_t size) : PriorityQueue<ScoreDocPtr>(size, LessThanCompare<HitQueueBase>(hitQueue))
     {
-        _hitQueue = hitQueue.get();
+        _hitQueue = hitQueue;
     }
     
     PriorityQueueScoreDocs::~PriorityQueueScoreDocs()
     {
-    }
-    
-    bool PriorityQueueScoreDocs::lessThan(const ScoreDocPtr& first, const ScoreDocPtr& second)
-    {
-        return _hitQueue->lessThan(first, second);
     }
     
     ScoreDocPtr PriorityQueueScoreDocs::getSentinelObject()

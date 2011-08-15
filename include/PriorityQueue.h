@@ -7,11 +7,29 @@
 #ifndef PRIORITYQUEUE_H
 #define PRIORITYQUEUE_H
 
+#include <boost/function.hpp>
 #include "LuceneObject.h"
 #include "MiscUtils.h"
 
 namespace Lucene
 {
+    template <class T>
+    class LessThanCompare
+    {
+    public:
+        LessThanCompare(T* lessThanImpl): _impl(lessThanImpl)
+        {}
+
+        template <class Item>
+        bool operator()(const Item& a, const Item& b)
+        {
+            return _impl->lessThan(a, b);
+        }
+
+    private:
+        T* _impl;
+    };
+
     /// A PriorityQueue maintains a partial ordering of its elements such that the least element can always 
     /// be found in constant time.  Put()'s and pop()'s require log(size) time.
     ///
@@ -21,8 +39,14 @@ namespace Lucene
     {
     public:
         typedef typename std::vector< TYPE, Allocator<TYPE> > heap_type;
+
+        PriorityQueue(int32_t maxSize) : _compare(LessThanCompare<PriorityQueue>(this))
+        {
+            this->_size = 0;
+            this->_maxSize = maxSize;
+        }
         
-        PriorityQueue(int32_t maxSize)
+        PriorityQueue(int32_t maxSize, boost::function2<bool, const TYPE&, const TYPE&> compare ): _compare(compare)
         {
             this->_size = 0;
             this->_maxSize = maxSize;
@@ -36,6 +60,7 @@ namespace Lucene
         heap_type heap;
         int32_t _size;
         int32_t _maxSize;
+        boost::function2<bool, const TYPE&, const TYPE&> _compare;
         
     public:
         virtual void initialize()
@@ -107,7 +132,7 @@ namespace Lucene
                 add(type);
                 return TYPE();
             }
-            else if (_size > 0 && !lessThan(type, heap[1]))
+            else if (_size > 0 && !_compare(type, heap[1]))
             {
                 TYPE result = heap[1];
                 heap[1] = type;
@@ -173,7 +198,7 @@ namespace Lucene
         {
             int32_t i = _size;
             int32_t j = MiscUtils::unsignedShift(i, 1);
-            while (j > 0 && lessThan(heap[i], heap[j]))
+            while (j > 0 && _compare(heap[i], heap[j]))
             {
                 (*swapper)(heap[i], heap[j]); // shift parents down
                 i = j;
@@ -186,15 +211,15 @@ namespace Lucene
             int32_t i = 1;
             int32_t j = i << 1; // find smaller child
             int32_t k = j + 1;
-            if (k <= _size && lessThan(heap[k], heap[j]))
+            if (k <= _size && _compare(heap[k], heap[j]))
                 j = k;
-            while (j <= _size && lessThan(heap[j], heap[i]))
+            while (j <= _size && _compare(heap[j], heap[i]))
             {
                 (*swapper)(heap[i], heap[j]); // shift up child
                 i = j;
                 j = i << 1;
                 k = j + 1;
-                if (k <= _size && lessThan(heap[k], heap[j]))
+                if (k <= _size && _compare(heap[k], heap[j]))
                     j = k;
             }
         }
@@ -215,7 +240,10 @@ namespace Lucene
         {
             return TYPE();
         }
+
+        friend class LessThanCompare<PriorityQueue>;
     };
+
 }
 
 #endif

@@ -41,12 +41,13 @@ namespace Lucene
         virtual ScoreDocPtr getSentinelObject();
         
         friend class PriorityQueueScoreDocs;
+        friend class LessThanCompare<HitQueueBase>;
     };
     
     class LPPAPI PriorityQueueScoreDocs : public PriorityQueue<ScoreDocPtr>
     {
     public:
-        PriorityQueueScoreDocs(HitQueueBasePtr hitQueue, int32_t size);
+        PriorityQueueScoreDocs(HitQueueBase* hitQueue, int32_t size);
         virtual ~PriorityQueueScoreDocs();
         
         LUCENE_CLASS(PriorityQueueScoreDocs);
@@ -55,7 +56,6 @@ namespace Lucene
         HitQueueBase* _hitQueue;
     
     protected:
-        virtual bool lessThan(const ScoreDocPtr& first, const ScoreDocPtr& second);
         virtual ScoreDocPtr getSentinelObject();
     };
 }
