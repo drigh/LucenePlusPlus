@@ -83,6 +83,13 @@ def options(opt):
         dest = 'debug')
 
     opt.add_option(
+        '--profile',
+        default = False,
+        action = "store_true",
+        help ='add profiling information to build.', 
+        dest = 'profile')
+
+    opt.add_option(
         '--static', 
         default = False,
         action = "store_true",
@@ -108,9 +115,15 @@ def build(bld):
     target_type = 'cstlib' if Options.options.static else 'cshlib'
     debug_define = '_DEBUG' if Options.options.debug else 'NDEBUG'
     if Options.options.debug:
-         compile_flags = ['-O0', '-g'] 
+         compile_flags = ['-O0', '-g']
     else:
          compile_flags = ['-O2']
+
+    linkflags = []
+    if Options.options.profile:
+        compile_flags.append( '-pg' )
+        linkflags = [ '-pg' ]
+
     lucene_sources = []
     for source_dir in lucene_source_dirs:
         source_dir = bld.path.find_dir(source_dir)
