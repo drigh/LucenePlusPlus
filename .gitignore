@@ -24,6 +24,7 @@
 *.lock*
 *.waf*
 .DS_Store
+.svn
 bin/*
 src/msvc/Debug DLL
 src/msvc/Debug Static
